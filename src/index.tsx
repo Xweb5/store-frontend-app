@@ -4,7 +4,7 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Login from './components/login/login';
+import Login from './components/login';
 import Dashboard from "./components/dashboard";
 
 const root = ReactDOM.createRoot(

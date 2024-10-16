@@ -8,6 +8,7 @@ import Input from '@mui/joy/Input';
 import Sheet from '@mui/joy/Sheet';
 import CssBaseline from '@mui/joy/CssBaseline';
 import { Alert } from "@mui/material";
+import Swal from "sweetalert2";
 
 
 export default function Login(){
@@ -17,7 +18,6 @@ export default function Login(){
   const navigate = useNavigate();
   const [username, setusername] = useState("");
   const [password, setpassword] = useState("");
-  const [showAlert, setShowAlert] = useState(false);
 
   const users = { username: "Jane", password: "testpassword" };
 
@@ -28,7 +28,12 @@ export default function Login(){
       localStorage.setItem("authenticated", "true");
       navigate("/dashboard");
     } else {
-      setShowAlert(true);
+      Swal.fire({
+        title: 'Error!',
+        text: 'Wrong username or password',
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      })
     }
   };
 
@@ -50,7 +55,6 @@ export default function Login(){
         }}
         variant="outlined"
       >
-      {showAlert && <Alert severity="error" onClose={() =>setShowAlert(false)}>Wrong username or password</Alert> }
       <form onSubmit={handleSubmit}>
         <FormControl>
           <FormLabel>Username</FormLabel>
