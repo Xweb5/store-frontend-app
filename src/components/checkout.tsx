@@ -5,12 +5,15 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow } from '@mui/material';
+import { Alert, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow } from '@mui/material';
 import Confirmation from './confirmation';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
 import { useAtom } from 'jotai';
 import { chartCounter } from '../context/manageContext';
+import axios from 'axios';
+
+import Swal from 'sweetalert2'
 
 
 
@@ -19,10 +22,9 @@ export default function Checkout(props: any) {
   
   const [incrementListBook, setIncrementListBook] = useAtom(chartCounter);
 
-  const [totalListBook, setTotalListBook] = React.useState(0);
-
   const [totalPriceBooks, setTotalPriceBooks] = React.useState(0);
   
+  const [showAlert, setShowAlert] = React.useState(false);
 
 
   const [showReadyToBuy, setShowReadyToBuy] = React.useState(false);
@@ -94,14 +96,37 @@ export default function Checkout(props: any) {
     return total;
   }
 
+  const execCheckout = () => {
+    setShowReadyToBuy(false);
+    handleClose();
+      axios
+        .get('http://localhost:8080/bookshop/v1/books/')
+        .then((response) => {
+          Swal.fire({
+            icon: "success",
+            title: "Saved",
+            showConfirmButton: true,
+            timer: 1500
+          });
+          setIncrementListBook(c => 0)
+          localStorage.removeItem("authenticated");
+          localStorage.removeItem("listOfBooks");
+          localStorage.removeItem("addChartCounter");
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+  }
+
   return (
     <React.Fragment>
+    
 
     <Confirmation title="ready?"
           message="Are you ready to proceed?"
           openModal={showReadyToBuy}
           onCloseWindow={(event: boolean) => {setShowReadyToBuy(event)}}
-          onOk={() => {alert('ready')}}
+          onOk={() => {execCheckout()}}
       />
 
       <Dialog maxWidth='lg'
