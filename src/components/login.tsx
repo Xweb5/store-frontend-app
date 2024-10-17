@@ -9,11 +9,13 @@ import Sheet from '@mui/joy/Sheet';
 import CssBaseline from '@mui/joy/CssBaseline';
 import Swal from "sweetalert2";
 import axios from "axios";
+import { useAtom } from "jotai";
+import { usersPassword } from "../context/manageContext";
 
 
 export default function Login(){
 
-  
+  const [userPass, setUserPass] = useAtom(usersPassword);
   localStorage.removeItem("authenticated");
   const navigate = useNavigate();
   const [username, setusername] = useState("");
@@ -29,6 +31,7 @@ export default function Login(){
             password: `${password}`
           }
         }).then((response) => {
+          setUserPass({ username : username, password : password})
           localStorage.setItem("authenticated", "true");
           navigate("/dashboard");
         })

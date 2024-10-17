@@ -10,7 +10,7 @@ import Confirmation from './confirmation';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
 import { useAtom } from 'jotai';
-import { chartCounter } from '../context/manageContext';
+import { chartCounter, usersPassword } from '../context/manageContext';
 import axios from 'axios';
 
 import Swal from 'sweetalert2'
@@ -19,7 +19,7 @@ import Swal from 'sweetalert2'
 
 export default function Checkout(props: any) {
 
-  
+  const [userPass, setUserPass] = useAtom(usersPassword);
   const [incrementListBook, setIncrementListBook] = useAtom(chartCounter);
 
   const [totalPriceBooks, setTotalPriceBooks] = React.useState(0);
@@ -109,8 +109,8 @@ export default function Checkout(props: any) {
         .post('http://localhost:8080/bookshop/v1/books/',
           bodyToPost, { 
             auth: {
-              username: 'user',
-              password: 'password'
+              username: userPass.username,
+              password: userPass.password
             }
           }
         )
