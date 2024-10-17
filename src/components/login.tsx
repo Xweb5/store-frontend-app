@@ -38,7 +38,7 @@ export default function Login(){
         .catch((err) => {
           Swal.fire({
             icon: "error",
-            title: err.message,
+            title: "login error",
             showConfirmButton: true,
             timer: 1500
           });
