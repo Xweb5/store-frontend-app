@@ -58,6 +58,7 @@ export default function NavBar(props: any) {
                     localStorage.removeItem("authenticated");
                     localStorage.removeItem("listOfBooks");
                     localStorage.removeItem("addChartCounter");
+                    localStorage.removeItem("userPassword");
                     navigate('/login')
                 }}
             />

@@ -4,7 +4,7 @@ import NavBar from "./NavBar";
 import Grid from '@mui/material/Grid2';
 import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Container, Paper, styled, Typography } from "@mui/material";
 import axios from "axios";
-import { chartCounter } from "../context/manageContext";
+import { chartCounter, usersPassword } from "../context/manageContext";
 import { useAtom } from "jotai";
 import Swal from "sweetalert2";
 
@@ -31,6 +31,7 @@ function createData(
 
 export default function Dashboard() {
 
+  const [userPass, setUserPass] = useAtom(usersPassword);
   const [incrementListBook, setIncrementListBook] = useAtom(chartCounter);
   const [rows, setRows] = React.useState([]);
 
@@ -41,8 +42,8 @@ export default function Dashboard() {
     axios.get('http://localhost:8080/bookshop/v1/books/' , 
         { 
           auth: {
-            username: 'user',
-            password: 'password'
+            username: userPass.username,
+            password: userPass.password
           }
         }).then((response) => {
             setRows(response.data);
