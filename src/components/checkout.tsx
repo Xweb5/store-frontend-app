@@ -99,8 +99,21 @@ export default function Checkout(props: any) {
   const execCheckout = () => {
     setShowReadyToBuy(false);
     handleClose();
+
+    let extractListBooks = localStorage.getItem("listOfBooks");
+    if (extractListBooks !== null) {
+      let listToExpose = JSON.parse(extractListBooks);
+      const map = new Map(listToExpose.map((obj:any) => [obj[0], obj[1]]));
+      const bodyToPost = Array.from(map.values())
       axios
-        .get('http://localhost:8080/bookshop/v1/books/')
+        .post('http://localhost:8080/bookshop/v1/books/',
+          bodyToPost, { 
+            auth: {
+              username: 'user',
+              password: 'password'
+            }
+          }
+        )
         .then((response) => {
           Swal.fire({
             icon: "success",
@@ -109,13 +122,20 @@ export default function Checkout(props: any) {
             timer: 1500
           });
           setIncrementListBook(c => 0)
-          localStorage.removeItem("authenticated");
           localStorage.removeItem("listOfBooks");
           localStorage.removeItem("addChartCounter");
         })
-        .catch((err) => {
+        .catch((err: any) => {
+          Swal.fire({
+            icon: "error",
+            title: err.message,
+            showConfirmButton: true,
+            timer: 1500
+          });
             console.log(err);
         });
+    }
+   
   }
 
   return (

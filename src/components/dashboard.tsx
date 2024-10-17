@@ -6,6 +6,7 @@ import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Cont
 import axios from "axios";
 import { chartCounter } from "../context/manageContext";
 import { useAtom } from "jotai";
+import Swal from "sweetalert2";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: '#fff',
@@ -33,14 +34,26 @@ export default function Dashboard() {
   const [incrementListBook, setIncrementListBook] = useAtom(chartCounter);
   const [rows, setRows] = React.useState([]);
 
+
   useEffect(() => {
-      axios
-        .get('http://localhost:8080/bookshop/v1/books/')
-        .then((response) => {
+
+
+    axios.get('http://localhost:8080/bookshop/v1/books/' , 
+        { 
+          auth: {
+            username: 'user',
+            password: 'password'
+          }
+        }).then((response) => {
             setRows(response.data);
         })
         .catch((err) => {
-            console.log(err);
+          Swal.fire({
+            icon: "error",
+            title: err.message,
+            showConfirmButton: true,
+            timer: 1500
+          });
         });
   }, []);
 
@@ -64,9 +77,9 @@ export default function Dashboard() {
 
   };
 
-  //if (!Boolean(localStorage.getItem("authenticated"))) {
-  //  return <Navigate replace to="/login" />;
-  //} else {
+  if (!Boolean(localStorage.getItem("authenticated"))) {
+    return <Navigate replace to="/login" />;
+  } else {
   return (
 
     <div>
@@ -106,5 +119,5 @@ export default function Dashboard() {
 
     </div>
   );
-  //}
+  }
 };

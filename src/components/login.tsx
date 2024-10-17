@@ -7,8 +7,8 @@ import FormLabel from '@mui/joy/FormLabel';
 import Input from '@mui/joy/Input';
 import Sheet from '@mui/joy/Sheet';
 import CssBaseline from '@mui/joy/CssBaseline';
-import { Alert } from "@mui/material";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 
 export default function Login(){
@@ -19,22 +19,28 @@ export default function Login(){
   const [username, setusername] = useState("");
   const [password, setpassword] = useState("");
 
-  const users = { username: "Jane", password: "testpassword" };
-
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    if (users.username === username && users.password === password) {
-      localStorage.setItem("authenticated", "true");
-      navigate("/dashboard");
-    } else {
-      Swal.fire({
-        title: 'Error!',
-        text: 'Wrong username or password',
-        icon: 'error',
-        confirmButtonText: 'Ok'
-      })
-    }
+      axios.get('http://localhost:8080/bookshop/v1/users/login' , 
+        { 
+          auth: {
+            username: `${username}`,
+            password: `${password}`
+          }
+        }).then((response) => {
+          localStorage.setItem("authenticated", "true");
+          navigate("/dashboard");
+        })
+        .catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: err.message,
+            showConfirmButton: true,
+            timer: 1500
+          });
+        });
+
   };
 
   return (
