@@ -14,10 +14,11 @@ import Badge from '@mui/material/Badge';
 import Checkout from './checkout';
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
-import { chartCounter } from '../context/manageContext';
+import { chartCounter, usersPassword } from '../context/manageContext';
 
 export default function NavBar(props: any) {
 
+    const [userPass, setUserPass] = useAtom(usersPassword);
     const [incrementListBook, setIncrementListBook] = useAtom(chartCounter);
 
     const navigate = useNavigate();
@@ -65,6 +66,7 @@ export default function NavBar(props: any) {
 
             <AppBar position="static">
                 <Container maxWidth="xl">
+
                     <Toolbar disableGutters>
                         <LibraryBooksIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
                         <Typography
@@ -74,7 +76,15 @@ export default function NavBar(props: any) {
                         >
                             BOOKSHOP
                         </Typography>
+
                         <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                            <Typography
+                                variant="h6"
+                                component="div"
+                                sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+                            >
+                                 Welcome {userPass.username}
+                            </Typography>
                             <Tooltip title="Shopping Cart">
                                 <Badge badgeContent={incrementListBook} color="secondary">
                                     <IconButton onClick={handleOpenCheckout} sx={{ p: 0 }}>
